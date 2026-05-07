@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AuthentiAction - Register</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        font-size: 2.2em;
+        color: #00dc82;
+        margin-bottom: 5px;
+      }
+
+      .header p {
+        color: #888;
+        font-size: 0.95em;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .video-section {
+        background: #0f0f1e;
+        border: 1px solid #00dc82;
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      .video-stream {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: block;
+      }
+
+      .gesture-info {
+        background: rgba(0, 220, 130, 0.1);
+        border-left: 4px solid #00dc82;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .gesture-info p {
+        color: #bbb;
+        margin: 5px 0;
+      }
+
+      .gesture-info strong {
+        color: #00dc82;
+      }
+
+      .side-panel {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 1px solid #00dc82;
+        border-radius: 12px;
+        padding: 25px;
+      }
+
+      .side-panel h2 {
+        color: #00dc82;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+      }
+
+      .gesture-legend {
+        margin-bottom: 30px;
+      }
+
+      .gesture-item {
+        padding: 12px;
+        background: #222;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .gesture-emoji {
+        font-size: 1.8em;
+        min-width: 40px;
+      }
+
+      .gesture-text {
+        flex: 1;
+      }
+
+      .gesture-text strong {
+        color: #00dc82;
+        display: block;
+        font-size: 0.9em;
+      }
+
+      .gesture-text small {
+        color: #888;
+        font-size: 0.8em;
+      }
+
+      .progress-section {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(0, 220, 130, 0.05);
+        border-radius: 8px;
+      }
+
+      .progress-section h3 {
+        color: #00dc82;
+        margin-bottom: 15px;
+        font-size: 1em;
+      }
+
+      .progress-slots {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      .progress-slot {
+        aspect-ratio: 1;
+        background: #333;
+        border: 2px dashed #666;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9em;
+        color: #888;
+      }
+
+      .progress-slot.filled {
+        background: linear-gradient(135deg, #00dc82 0%, #00a86b 100%);
+        border: 2px solid #00dc82;
+        color: black;
+        font-weight: bold;
+      }
+
+      .progress-slot.filled .emoji {
+        font-size: 1.5em;
+      }
+
+      .button-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 30px;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.95em;
+      }
+
+      .btn-save {
+        background: linear-gradient(135deg, #00dc82 0%, #00a86b 100%);
+        color: black;
+        border: 1px solid #00dc82;
+      }
+
+      .btn-save:hover:not(:disabled) {
+        box-shadow: 0 0 20px rgba(0, 220, 130, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .btn-save:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-reset {
+        background: #333;
+        color: #fff;
+        border: 1px solid #666;
+      }
+
+      .btn-reset:hover {
+        background: #444;
+        border-color: #888;
+      }
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+
+      .bottom-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .btn-cancel {
+        background: #c7254e;
+        color: white;
+        border: 1px solid #c7254e;
+      }
+
+      .btn-cancel:hover {
+        background: #a02038;
+      }
+
+      .hold-progress {
+        width: 100%;
+        height: 4px;
+        background: #333;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .hold-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #00dc82 0%, #00a86b 100%);
+        width: 0%;
+        transition: width 0.1s linear;
+      }
+
+      @media (max-width: 768px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>📝 Register Gesture Password</h1>
+        <p>User: <strong id="username">{{ username }}</strong></p>
+      </div>
+
+      <div class="content">
+        <div class="video-section">
+          <img src="/video_feed" alt="Webcam Feed" class="video-stream" />
+          <div class="gesture-info">
+            <p><strong>Detected:</strong> <span id="detected">No hand</span></p>
+            <p>
+              <strong>Progress:</strong>
+              <span id="progress">0/{{ sequence_length }}</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="side-panel">
+          <h2>🎯 Capture Progress</h2>
+
+          <div class="progress-section">
+            <h3>Gesture Sequence</h3>
+            <div class="progress-slots" id="progressSlots">
+              {% for i in range(sequence_length) %}
+              <div class="progress-slot" id="slot-{{ i }}">
+                <span class="text">{{ i+1 }}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <h2 style="margin-top: 25px">🖐️ Gestures</h2>
+          <div class="gesture-legend">
+            {% for key, gesture in gestures.items() %}
+            <div class="gesture-item">
+              <div class="gesture-emoji">{{ gesture.emoji }}</div>
+              <div class="gesture-text">
+                <strong>{{ key }}</strong>
+                <small>{{ gesture.name }}</small>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-reset" onclick="resetSequence()">
+              🔄 Reset
+            </button>
+            <button
+              class="btn btn-save"
+              id="saveBtn"
+              onclick="saveProfile()"
+              disabled
+            >
+              ✅ Save
+            </button>
+          </div>
+
+          <div class="bottom-buttons">
+            <button
+              class="btn btn-cancel full-width"
+              onclick="window.location.href = '/logout'"
+            >
+              ❌ Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let captured = [];
+      const SEQUENCE_LENGTH = {{ sequence_length }};
+      const HOLD_FRAMES = 18;
+      let lastGesture = null;
+      let holdCounter = 0;
+
+      function updateUI() {
+          document.getElementById('progress').textContent = `${captured.length}/${SEQUENCE_LENGTH}`;
+
+          // Update progress slots
+          for (let i = 0; i < SEQUENCE_LENGTH; i++) {
+              const slot = document.getElementById(`slot-${i}`);
+              if (i < captured.length) {
+                  const gesture = captured[i];
+                  slot.className = 'progress-slot filled';
+                  slot.innerHTML = `<div class="emoji" style="font-size: 1.5em;">{{ gestures[gesture]['emoji'] if gesture in gestures else '' }}</div>`;
+              } else {
+                  slot.className = 'progress-slot';
+                  slot.innerHTML = `<span class="text">${i + 1}</span>`;
+              }
+          }
+
+          // Enable save button when complete
+          document.getElementById('saveBtn').disabled = captured.length < SEQUENCE_LENGTH;
+      }
+
+      function resetSequence() {
+          captured = [];
+          lastGesture = null;
+          holdCounter = 0;
+          updateUI();
+      }
+
+      function saveProfile() {
+          fetch('/register', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({sequence: captured})
+          })
+          .then(r => r.json())
+          .then(data => {
+              if (data.success) {
+                  alert('✅ Profile saved! Redirecting to dashboard...');
+                  window.location.href = '/dashboard';
+              }
+          });
+      }
+
+      // Polling for gesture detection
+      setInterval(() => {
+          fetch('/api/gesture')
+              .then(r => r.json())
+              .then(data => {
+                  if (data.gesture) {
+                      document.getElementById('detected').textContent =
+                          `${data.emoji} ${data.gesture}: ${data.name}`;
+
+                      // Gesture hold logic
+                      if (data.gesture === lastGesture && captured.length < SEQUENCE_LENGTH) {
+                          holdCounter++;
+                          const progress = Math.min(holdCounter / HOLD_FRAMES, 1);
+                          if (holdCounter >= HOLD_FRAMES) {
+                              captured.push(data.gesture);
+                              holdCounter = 0;
+                              lastGesture = null;
+                              updateUI();
+                          }
+                      } else {
+                          lastGesture = data.gesture;
+                          holdCounter = 0;
+                      }
+                  } else {
+                      document.getElementById('detected').textContent = 'No hand detected';
+                      lastGesture = null;
+                      holdCounter = 0;
+                  }
+              });
+      }, 100);
+
+      updateUI();
+    </script>
+  </body>
+</html>

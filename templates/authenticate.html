@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AuthentiAction - Authenticate</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        font-size: 2.2em;
+        color: #00a8ff;
+        margin-bottom: 5px;
+      }
+
+      .header p {
+        color: #888;
+        font-size: 0.95em;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .video-section {
+        background: #0f0f1e;
+        border: 1px solid #00a8ff;
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      .video-stream {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: block;
+      }
+
+      .gesture-info {
+        background: rgba(0, 168, 255, 0.1);
+        border-left: 4px solid #00a8ff;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .gesture-info p {
+        color: #bbb;
+        margin: 5px 0;
+      }
+
+      .gesture-info strong {
+        color: #00a8ff;
+      }
+
+      .side-panel {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 1px solid #00a8ff;
+        border-radius: 12px;
+        padding: 25px;
+      }
+
+      .side-panel h2 {
+        color: #00a8ff;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+      }
+
+      .gesture-legend {
+        margin-bottom: 30px;
+      }
+
+      .gesture-item {
+        padding: 12px;
+        background: #222;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .gesture-emoji {
+        font-size: 1.8em;
+        min-width: 40px;
+      }
+
+      .gesture-text {
+        flex: 1;
+      }
+
+      .gesture-text strong {
+        color: #00a8ff;
+        display: block;
+        font-size: 0.9em;
+      }
+
+      .gesture-text small {
+        color: #888;
+        font-size: 0.8em;
+      }
+
+      .progress-section {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(0, 168, 255, 0.05);
+        border-radius: 8px;
+      }
+
+      .progress-section h3 {
+        color: #00a8ff;
+        margin-bottom: 15px;
+        font-size: 1em;
+      }
+
+      .progress-slots {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      .progress-slot {
+        aspect-ratio: 1;
+        background: #333;
+        border: 2px dashed #666;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9em;
+        color: #888;
+      }
+
+      .progress-slot.filled {
+        background: linear-gradient(135deg, #00a8ff 0%, #0088cc 100%);
+        border: 2px solid #00a8ff;
+        color: white;
+        font-weight: bold;
+      }
+
+      .progress-slot.filled .emoji {
+        font-size: 1.5em;
+      }
+
+      .attempts-counter {
+        display: flex;
+        gap: 8px;
+        margin: 15px 0;
+        justify-content: center;
+      }
+
+      .attempt-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #333;
+        border: 1px solid #666;
+      }
+
+      .attempt-dot.failed {
+        background: #ff6b6b;
+        border-color: #ff6b6b;
+      }
+
+      .button-group {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.95em;
+      }
+
+      .btn-submit {
+        background: linear-gradient(135deg, #00a8ff 0%, #0088cc 100%);
+        color: white;
+        border: 1px solid #00a8ff;
+      }
+
+      .btn-submit:hover:not(:disabled) {
+        box-shadow: 0 0 20px rgba(0, 168, 255, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .btn-submit:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-reset {
+        background: #333;
+        color: #fff;
+        border: 1px solid #666;
+      }
+
+      .btn-reset:hover {
+        background: #444;
+        border-color: #888;
+      }
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+
+      .btn-cancel {
+        background: #c7254e;
+        color: white;
+        border: 1px solid #c7254e;
+      }
+
+      .btn-cancel:hover {
+        background: #a02038;
+      }
+
+      .error-box {
+        background: rgba(255, 107, 107, 0.1);
+        border-left: 4px solid #ff6b6b;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 20px;
+        color: #ff9999;
+        display: none;
+      }
+
+      .error-box.show {
+        display: block;
+      }
+
+      @media (max-width: 768px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🔓 Authenticate</h1>
+        <p>User: <strong>{{ username }}</strong></p>
+      </div>
+
+      <div class="content">
+        <div class="video-section">
+          <img src="/video_feed" alt="Webcam Feed" class="video-stream" />
+          <div class="gesture-info">
+            <p><strong>Detected:</strong> <span id="detected">No hand</span></p>
+            <p>
+              <strong>Progress:</strong>
+              <span id="progress">0/{{ sequence_length }}</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="side-panel">
+          <h2>🎯 Match Pattern</h2>
+
+          <div class="progress-section">
+            <h3>Gesture Sequence</h3>
+            <div class="progress-slots" id="progressSlots">
+              {% for i in range(sequence_length) %}
+              <div class="progress-slot" id="slot-{{ i }}">
+                <span class="text">{{ i+1 }}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="progress-section">
+            <h3>Attempts</h3>
+            <div class="attempts-counter" id="attemptsCounter">
+              {% for i in range(max_attempts) %}
+              <div class="attempt-dot" id="attempt-{{ i }}"></div>
+              {% endfor %}
+            </div>
+            <p style="text-align: center; color: #888; margin-top: 10px">
+              <span id="attemptText">0</span>/{{ max_attempts }}
+            </p>
+          </div>
+
+          <h2 style="margin-top: 25px">🖐️ Gestures</h2>
+          <div class="gesture-legend">
+            {% for key, gesture in gestures.items() %}
+            <div class="gesture-item">
+              <div class="gesture-emoji">{{ gesture.emoji }}</div>
+              <div class="gesture-text">
+                <strong>{{ key }}</strong>
+                <small>{{ gesture.name }}</small>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-reset" onclick="resetSequence()">
+              🔄 Reset
+            </button>
+            <button
+              class="btn btn-submit"
+              id="submitBtn"
+              onclick="submitPattern()"
+              disabled
+            >
+              ✓ Submit
+            </button>
+            <button
+              class="btn btn-cancel"
+              onclick="window.location.href = '/logout'"
+            >
+              ❌ Logout
+            </button>
+          </div>
+
+          <div class="error-box" id="errorBox"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let captured = [];
+      let attempts = 0;
+      const SEQUENCE_LENGTH = {{ sequence_length }};
+      const MAX_ATTEMPTS = {{ max_attempts }};
+      const HOLD_FRAMES = 18;
+      let lastGesture = null;
+      let holdCounter = 0;
+
+      function updateUI() {
+          document.getElementById('progress').textContent = `${captured.length}/${SEQUENCE_LENGTH}`;
+          document.getElementById('attemptText').textContent = attempts;
+
+          // Update progress slots
+          for (let i = 0; i < SEQUENCE_LENGTH; i++) {
+              const slot = document.getElementById(`slot-${i}`);
+              if (i < captured.length) {
+                  const gesture = captured[i];
+                  slot.className = 'progress-slot filled';
+                  slot.innerHTML = `<div class="emoji" style="font-size: 1.5em;">{{ gestures[gesture]['emoji'] if gesture in gestures else '' }}</div>`;
+              } else {
+                  slot.className = 'progress-slot';
+                  slot.innerHTML = `<span class="text">${i + 1}</span>`;
+              }
+          }
+
+          // Update attempt dots
+          for (let i = 0; i < MAX_ATTEMPTS; i++) {
+              const dot = document.getElementById(`attempt-${i}`);
+              if (i < attempts) {
+                  dot.classList.add('failed');
+              } else {
+                  dot.classList.remove('failed');
+              }
+          }
+
+          // Enable submit button when complete
+          document.getElementById('submitBtn').disabled = captured.length < SEQUENCE_LENGTH;
+      }
+
+      function resetSequence() {
+          captured = [];
+          lastGesture = null;
+          holdCounter = 0;
+          document.getElementById('errorBox').classList.remove('show');
+          updateUI();
+      }
+
+      function submitPattern() {
+          fetch('/authenticate', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({sequence: captured})
+          })
+          .then(r => r.json())
+          .then(data => {
+              if (data.success) {
+                  alert('✅ Pattern matched! Access granted!');
+                  window.location.href = '/dashboard';
+              } else {
+                  attempts++;
+                  if (attempts >= MAX_ATTEMPTS) {
+                      showError('❌ Maximum attempts exceeded. Access denied.');
+                      document.getElementById('submitBtn').disabled = true;
+                      setTimeout(() => {
+                          window.location.href = '/logout';
+                      }, 2000);
+                  } else {
+                      showError(`❌ Pattern mismatch. ${MAX_ATTEMPTS - attempts} attempts remaining.`);
+                      resetSequence();
+                  }
+              }
+          });
+      }
+
+      function showError(msg) {
+          const box = document.getElementById('errorBox');
+          box.textContent = msg;
+          box.classList.add('show');
+      }
+
+      // Polling for gesture detection
+      setInterval(() => {
+          if (attempts >= MAX_ATTEMPTS) return;
+
+          fetch('/api/gesture')
+              .then(r => r.json())
+              .then(data => {
+                  if (data.gesture) {
+                      document.getElementById('detected').textContent =
+                          `${data.emoji} ${data.gesture}: ${data.name}`;
+
+                      // Gesture hold logic
+                      if (data.gesture === lastGesture && captured.length < SEQUENCE_LENGTH) {
+                          holdCounter++;
+                          if (holdCounter >= HOLD_FRAMES) {
+                              captured.push(data.gesture);
+                              holdCounter = 0;
+                              lastGesture = null;
+                              updateUI();
+                          }
+                      } else {
+                          lastGesture = data.gesture;
+                          holdCounter = 0;
+                      }
+                  } else {
+                      document.getElementById('detected').textContent = 'No hand detected';
+                      lastGesture = null;
+                      holdCounter = 0;
+                  }
+              });
+      }, 100);
+
+      updateUI();
+    </script>
+  </body>
+</html>

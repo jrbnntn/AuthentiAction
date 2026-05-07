@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AuthentiAction - Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .header h1 {
+        font-size: 2.8em;
+        color: #00dc82;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        color: #888;
+        font-size: 1.1em;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 1px solid #00dc82;
+        border-radius: 12px;
+        padding: 30px;
+      }
+
+      .card h2 {
+        color: #00dc82;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .card-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(0, 220, 130, 0.2);
+      }
+
+      .info-row:last-child {
+        border-bottom: none;
+      }
+
+      .info-label {
+        color: #888;
+        font-weight: 500;
+      }
+
+      .info-value {
+        color: #00dc82;
+        font-weight: bold;
+      }
+
+      .gesture-sequence {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+
+      .gesture-badge {
+        background: rgba(0, 220, 130, 0.2);
+        border: 2px solid #00dc82;
+        padding: 10px 15px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: bold;
+        color: #00dc82;
+      }
+
+      .gesture-badge .emoji {
+        font-size: 1.3em;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .stat-box {
+        background: rgba(0, 220, 130, 0.1);
+        border-left: 4px solid #00dc82;
+        padding: 15px;
+        border-radius: 5px;
+      }
+
+      .stat-label {
+        color: #888;
+        font-size: 0.85em;
+        margin-bottom: 5px;
+      }
+
+      .stat-value {
+        color: #00dc82;
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      .button-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .btn {
+        padding: 15px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .btn-update {
+        background: linear-gradient(135deg, #00dc82 0%, #00a86b 100%);
+        color: black;
+        border: 1px solid #00dc82;
+      }
+
+      .btn-update:hover {
+        box-shadow: 0 0 20px rgba(0, 220, 130, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .btn-logout {
+        background: #c7254e;
+        color: white;
+        border: 1px solid #c7254e;
+      }
+
+      .btn-logout:hover {
+        box-shadow: 0 0 20px rgba(199, 37, 78, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .footer {
+        text-align: center;
+        color: #888;
+        font-size: 0.9em;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 220, 130, 0.2);
+      }
+
+      .welcome-box {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 220, 130, 0.1) 0%,
+          rgba(0, 168, 107, 0.1) 100%
+        );
+        border: 2px solid #00dc82;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .welcome-box h2 {
+        font-size: 2em;
+        margin-bottom: 10px;
+        color: #00dc82;
+      }
+
+      .welcome-box p {
+        color: #bbb;
+        font-size: 1.05em;
+      }
+
+      @media (max-width: 768px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+
+        .header h1 {
+          font-size: 2em;
+        }
+
+        .button-group {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="welcome-box">
+        <h2>✅ Welcome, {{ username }}!</h2>
+        <p>
+          You have been successfully authenticated with your gesture password.
+        </p>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <h2>🎯 Authentication Details</h2>
+          <div class="card-content">
+            <div class="info-row">
+              <span class="info-label">Status</span>
+              <span class="info-value">✅ Authenticated</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Method</span>
+              <span class="info-value">Gesture Pattern</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Gestures</span>
+              <span class="info-value">4-Gesture Sequence</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Detection</span>
+              <span class="info-value">Live Webcam</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Security</span>
+              <span class="info-value">SHA-256 Hash</span>
+            </div>
+
+            <div class="stats">
+              <div class="stat-box">
+                <div class="stat-label">Profile Type</div>
+                <div class="stat-value">Pattern-Only</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Session</div>
+                <div class="stat-value">Active</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📋 Profile Information</h2>
+          <div class="card-content">
+            <div class="info-row">
+              <span class="info-label">Username</span>
+              <span class="info-value">{{ username }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Created</span>
+              <span class="info-value"
+                >{{ profile.created_at.split('T')[0] }}</span
+              >
+            </div>
+            <div class="info-row">
+              <span class="info-label">Pattern Hash</span>
+              <span
+                class="info-value"
+                style="font-family: monospace; font-size: 0.85em"
+                >{{ profile.sequence_hash[:16] }}...</span
+              >
+            </div>
+
+            <div style="margin-top: 25px">
+              <h3 style="color: #888; margin-bottom: 15px; font-size: 0.95em">
+                Your Gesture Pattern
+              </h3>
+              <div class="gesture-sequence">
+                <div class="gesture-badge">
+                  <span class="emoji">👆</span>
+                  <span>G1</span>
+                </div>
+                <span style="color: #666; align-self: center">→</span>
+                <div class="gesture-badge">
+                  <span class="emoji">🤏</span>
+                  <span>G2</span>
+                </div>
+                <span style="color: #666; align-self: center">→</span>
+                <div class="gesture-badge">
+                  <span class="emoji">✌</span>
+                  <span>G3</span>
+                </div>
+                <span style="color: #666; align-self: center">→</span>
+                <div class="gesture-badge">
+                  <span class="emoji">🖐</span>
+                  <span>G4</span>
+                </div>
+              </div>
+              <p style="color: #888; font-size: 0.85em; margin-top: 15px">
+                Example pattern shown. Your actual pattern is securely hashed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button
+          class="btn btn-update"
+          onclick="window.location.href = '/register'"
+        >
+          🔄 Update Gesture Password
+        </button>
+        <button
+          class="btn btn-logout"
+          onclick="window.location.href = '/logout'"
+        >
+          🚪 Logout
+        </button>
+      </div>
+
+      <div class="footer">
+        🔒 Your gesture password is securely hashed and stored.<br />
+        Only your exact gesture pattern will grant access.
+      </div>
+    </div>
+  </body>
+</html>
